@@ -28,7 +28,6 @@ export default function HomeTemplate({ videoData }: Props) {
 
   const findCurrentQuiz = (time: number) => {
     const idx = Math.min(Math.floor(time / 900), videoData?.quizzes.length);
-    console.log('idx: ', idx);
 
     if (idx >= 1) {
       const quiz = videoData?.quizzes.find((item) => item.idx === idx);
