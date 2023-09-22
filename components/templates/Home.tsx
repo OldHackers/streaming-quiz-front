@@ -1,42 +1,85 @@
-import styled from 'styled-components';
-import Header from '../organisms/Header';
-import VideoPlayer from '../organisms/VideoPlayer';
-import Quiz from '../organisms/Quiz';
-import VideoCard from '../organisms/VideoCard';
+import { useEffect, useState } from 'react';
 
-export default function HomeTemplate() {
+import styled from 'styled-components';
+
+import { dummyVideos } from '../../database/dummy';
+import { Quiz } from '../../entity/quiz';
+import { Video } from '../../entity/video';
+import Header from '../organisms/Header';
+import QuizBox from '../organisms/Quiz';
+import VideoCard from '../organisms/VideoCard';
+import VideoPlayer from '../organisms/VideoPlayer';
+
+interface Props {
+  videoData: Video;
+}
+
+export default function HomeTemplate({ videoData }: Props) {
+  console.log(videoData);
+
+  const [currentTime, setCurrentTime] = useState(0);
+  const [currentQuiz, setCurrentQuiz] = useState<Quiz | null>(null);
+  const [isAfterAnswer, setIsAfterAnswer] = useState(false);
+
+  const handleProgress = (state: any) => {
+    const { playedSeconds } = state;
+    setCurrentTime(playedSeconds);
+  };
+
+  const findCurrentQuiz = (time: number) => {
+    const idx = Math.min(Math.floor(time / 900), videoData?.quizzes.length);
+    console.log('idx: ', idx);
+
+    if (idx >= 1) {
+      const quiz = videoData?.quizzes.find((item) => item.idx === idx);
+      return quiz;
+    }
+
+    return null;
+  };
+
+  useEffect(() => {
+    const newQuiz = findCurrentQuiz(currentTime);
+    if (currentQuiz?.id !== newQuiz?.id) {
+      newQuiz?.choiceList.forEach((choice) => {
+        choice.boxOption = 'normal';
+      });
+      //@ts-ignore
+      setCurrentQuiz(newQuiz);
+      setIsAfterAnswer(false);
+    }
+    console.log(currentQuiz);
+  }, [currentTime]);
+
   return (
     <div>
-      <Header />
+      <Header title="인공지능 13주차 - RNN (컴퓨터교육과)" subTitle="Jangwon Lee" />
       <VideoAndQuizSection>
         <VideoPlayerContainer>
-          <VideoPlayer />
+          <VideoPlayer handleProgress={handleProgress} url={videoData.url} />
         </VideoPlayerContainer>
         <QuizContainer>
-          <Quiz />
+          <QuizBox
+            quizData={currentQuiz}
+            setQuizData={setCurrentQuiz}
+            isAfterAnswer={isAfterAnswer}
+            setIsAfterAnswer={setIsAfterAnswer}
+          />
         </QuizContainer>
       </VideoAndQuizSection>
       <VideosSection>
         <div className="title">Videos </div>
         <div className="video-container">
-          <div className="video-wrapper">
-            <VideoCard />
-          </div>
-          <div className="video-wrapper">
-            <VideoCard />
-          </div>
-          <div className="video-wrapper">
-            <VideoCard />
-          </div>
-          <div className="video-wrapper">
-            <VideoCard />
-          </div>
-          <div className="video-wrapper">
-            <VideoCard />
-          </div>
-          <div className="video-wrapper">
-            <VideoCard />
-          </div>
+          {dummyVideos.map((item, index) => (
+            <div className="video-wrapper" key={index}>
+              <VideoCard img={item.url} name={item.title} sub={item.uploader} />
+            </div>
+          ))}
+          {/* {Array.from({ length: 20 }).map((_, index) => (
+            <div className="video-wrapper" key={index}>
+              <VideoCard />
+            </div>
+          ))} */}
         </div>
       </VideosSection>
     </div>
@@ -46,7 +89,7 @@ export default function HomeTemplate() {
 const VideoAndQuizSection = styled.div`
   width: 100%;
   height: 100%;
-  max-height: 720px;
+  /* max-height: 720px; */
   display: flex;
   border-bottom: 1px solid rgba(108, 102, 133, 0.2);
 `;
@@ -79,12 +122,14 @@ const VideosSection = styled.div`
 
   .video-container {
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    justify-items: center;
+    grid-gap: 24px;
 
     .video-wrapper {
+      width: 100%;
       cursor: pointer;
-      margin: 0 12px 24px 0;
     }
   }
 `;

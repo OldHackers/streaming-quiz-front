@@ -7,7 +7,8 @@ import HomeTemplate from '../components/templates/Home';
 export default function Home() {
   return (
     <div className={styles.container}>
-      <HomeTemplate />
+      {/* <HomeTemplate /> */}
+      fda
     </div>
   );
 }
