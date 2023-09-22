@@ -53,7 +53,7 @@ export default function HomeTemplate({ videoData }: Props) {
 
   return (
     <div>
-      <Header title="인공지능 13주차 - RNN (컴퓨터교육과)" subTitle="Jangwon Lee" />
+      <Header title="Week 13 - Generative Models & Reinforcement Learning" subTitle="Jangwon Lee" />
       <VideoAndQuizSection>
         <VideoPlayerContainer>
           <VideoPlayer handleProgress={handleProgress} url={videoData.url} />
@@ -75,11 +75,6 @@ export default function HomeTemplate({ videoData }: Props) {
               <VideoCard img={item.url} name={item.title} sub={item.uploader} />
             </div>
           ))}
-          {/* {Array.from({ length: 20 }).map((_, index) => (
-            <div className="video-wrapper" key={index}>
-              <VideoCard />
-            </div>
-          ))} */}
         </div>
       </VideosSection>
     </div>
