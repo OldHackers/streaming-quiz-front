@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'NotoSans';
+  src: url('./NotoSans-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'CreatoDisplay';
+  src: url('./CreatoDisplay-Regular.otf');
+}
