@@ -1,14 +1,29 @@
-import ReactPlayer from 'react-player';
+import dynamic from 'next/dynamic';
+import Router from 'next/router';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-export default function VideoPlayer() {
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
+
+interface Props {
+  handleProgress: (state: any) => void;
+  url: string;
+}
+
+export default function VideoPlayer({ handleProgress, url }: Props) {
   return (
-    <PlayerWrapper>
+    <PlayerWrapper
+      onClick={() => {
+        Router.push('/content/3bf6340a-3055-40c4-8500-d7027551125a');
+      }}
+    >
       <ReactPlayer
         className="react-player"
-        url="https://www.youtube.com/watch?v=YZ2gBai8xRA&pp=ygUGc2FtcGxl"
+        url={url}
         width="100%"
         height="100%"
+        controls
+        onProgress={handleProgress}
       />
     </PlayerWrapper>
   );
