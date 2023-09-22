@@ -4,7 +4,12 @@ import Download from '../../public/svg/download.svg';
 import Search from '../../public/svg/search.svg';
 import Alarm from '../../public/svg/alarm.svg';
 
-export default function Header() {
+interface Props {
+  title?: string;
+  subTitle?: string;
+}
+
+export default function Header({ title, subTitle }: Props) {
   return (
     <HeaderWrapper>
       <HeaderContent>
@@ -12,8 +17,8 @@ export default function Header() {
           <HamburgerIcon />
         </div>
         <div className="center-container">
-          <div className="title">Chronicle - Stunning Stories. Made effortlessly.</div>
-          <div className="sub-title">Mayuresh Patole</div>
+          <div className="title">{title}</div>
+          <div className="sub-title">{subTitle}</div>
         </div>
         <div className="right-container">
           <DownloadIcon />
@@ -31,7 +36,6 @@ const HeaderWrapper = styled.header`
   width: 100%;
   height: 96px;
   background-color: #fff;
-  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
   border-bottom: 2px solid rgba(108, 102, 133, 0.2);
   z-index: 50;
 `;
@@ -85,16 +89,19 @@ const DownloadIcon = styled(Download)`
   width: 24px;
   height: 24px;
   margin-right: 20px;
+  cursor: pointer;
 `;
 
 const SearchIcon = styled(Search)`
   width: 24px;
   height: 24px;
   margin-right: 20px;
+  cursor: pointer;
 `;
 
 const AlarmIcon = styled(Alarm)`
   width: 24px;
   height: 24px;
   margin-right: 20px;
+  cursor: pointer;
 `;
