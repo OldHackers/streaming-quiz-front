@@ -12,11 +12,7 @@ interface Props {
 
 export default function VideoPlayer({ handleProgress, url }: Props) {
   return (
-    <PlayerWrapper
-      onClick={() => {
-        Router.push('/content/3bf6340a-3055-40c4-8500-d7027551125a');
-      }}
-    >
+    <PlayerWrapper>
       <ReactPlayer
         className="react-player"
         url={url}
