@@ -105,6 +105,7 @@ const QuizContainer = styled.div`
 const VideosSection = styled.div`
   width: 100%;
   padding: 24px;
+  background-color: #fff;
 
   .title {
     color: #212121;
