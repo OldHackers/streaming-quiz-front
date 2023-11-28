@@ -1,11 +1,11 @@
-import VideoRepositoryImpl from '../repository/video';
+import { VideoRepository } from './../repository/video';
 
 class VideoUseCase {
-  constructor(private readonly UserRepository: VideoRepositoryImpl) {}
+  constructor(private readonly VideoRepository: VideoRepository) {}
 
   public async getVideo(id: string) {
     try {
-      const data = await this.UserRepository.getVideo(id);
+      const data = await this.VideoRepository.getVideo(id);
 
       return data;
     } catch (err) {
