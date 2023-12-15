@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -9,6 +9,7 @@ import Header from '../organisms/Header';
 import QuizBox from '../organisms/Quiz';
 import VideoCard from '../organisms/VideoCard';
 import VideoPlayer from '../organisms/VideoPlayer';
+import Router from 'next/router';
 
 interface Props {
   videoData: Video;
@@ -20,6 +21,8 @@ export default function HomeTemplate({ videoData }: Props) {
   const [currentTime, setCurrentTime] = useState(0);
   const [currentQuiz, setCurrentQuiz] = useState<Quiz | null>(null);
   const [isAfterAnswer, setIsAfterAnswer] = useState(false);
+  const quizContainerRef = useRef<HTMLDivElement>(null);
+  const [boxHeight, setBoxHeight] = useState(0);
 
   const handleProgress = (state: any) => {
     const { playedSeconds } = state;
@@ -36,6 +39,13 @@ export default function HomeTemplate({ videoData }: Props) {
 
     return null;
   };
+
+  useEffect(() => {
+    if (quizContainerRef.current) {
+      console.log(quizContainerRef.current?.offsetHeight);
+      setBoxHeight(quizContainerRef.current?.offsetHeight);
+    }
+  }, []);
 
   useEffect(() => {
     const newQuiz = findCurrentQuiz(currentTime);
@@ -57,12 +67,13 @@ export default function HomeTemplate({ videoData }: Props) {
         <VideoPlayerContainer>
           <VideoPlayer handleProgress={handleProgress} url={videoData.url} />
         </VideoPlayerContainer>
-        <QuizContainer>
+        <QuizContainer ref={quizContainerRef}>
           <QuizBox
             quizData={currentQuiz}
             setQuizData={setCurrentQuiz}
             isAfterAnswer={isAfterAnswer}
             setIsAfterAnswer={setIsAfterAnswer}
+            height={boxHeight}
           />
         </QuizContainer>
       </VideoAndQuizSection>
@@ -70,7 +81,13 @@ export default function HomeTemplate({ videoData }: Props) {
         <div className="title">Videos </div>
         <div className="video-container">
           {dummyVideos.map((item, index) => (
-            <div className="video-wrapper" key={index}>
+            <div
+              className="video-wrapper"
+              key={index}
+              onClick={() => {
+                Router.push(`/content/${item.id}`);
+              }}
+            >
               <VideoCard img={item.url} name={item.title} sub={item.uploader} />
             </div>
           ))}
@@ -101,6 +118,7 @@ const VideoPlayerContainer = styled.div`
 const QuizContainer = styled.div`
   width: 100%;
   max-width: 400px;
+  /* max-height: 720px; */
   background-color: #1b1d25; ;
 `;
 
