@@ -5,16 +5,30 @@ import { SetStateAction, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { Choice, Quiz } from '../../entity/quiz';
+import Chat from './Chat';
 
 interface Props {
   quizData?: Quiz | null;
   setQuizData: React.Dispatch<SetStateAction<Quiz | null>>;
   isAfterAnswer: boolean;
   setIsAfterAnswer: React.Dispatch<SetStateAction<boolean>>;
+  height?: number;
 }
 
-export default function QuizBox({ quizData, setQuizData, isAfterAnswer, setIsAfterAnswer }: Props) {
+const enum Mode {
+  Quiz = 'quiz',
+  Chat = 'chat',
+}
+
+export default function QuizBox({
+  quizData,
+  setQuizData,
+  isAfterAnswer,
+  setIsAfterAnswer,
+  height,
+}: Props) {
   console.log(quizData);
+  const [mode, setMode] = useState(Mode.Quiz);
 
   useEffect(() => {
     console.log(isAfterAnswer);
@@ -61,36 +75,56 @@ export default function QuizBox({ quizData, setQuizData, isAfterAnswer, setIsAft
   return (
     <QuizContainer>
       <CategoryBar>
-        <Category selected>Quiz</Category>
-        <Category>Chat</Category>
+        <Category
+          selected={mode === Mode.Quiz}
+          onClick={() => {
+            setMode(Mode.Quiz);
+          }}
+        >
+          Quiz
+        </Category>
+        <Category
+          selected={mode === Mode.Chat}
+          onClick={() => {
+            setMode(Mode.Chat);
+          }}
+        >
+          Chat
+        </Category>
       </CategoryBar>
-      <Content>
-        {quizData ? (
-          <>
-            <div className="question-title">Question</div>
-            <div className="question-content">{quizData.question}</div>
-            <div className="choice-container">
-              {quizData.choiceList.map((choice, index) => (
-                <ChoiceBox
-                  key={choice.id}
-                  onClick={() => (isAfterAnswer ? null : checkAnswer(choice))}
-                  selected={choice.boxOption}
-                >
-                  {choice.content}
-                </ChoiceBox>
-              ))}
+      {mode === Mode.Quiz ? (
+        <Content>
+          {quizData ? (
+            <>
+              <div className="question-title">Question</div>
+              <div className="question-content">{quizData.question}</div>
+              <div className="choice-container">
+                {quizData.choiceList.map((choice, index) => (
+                  <ChoiceBox
+                    key={choice.id}
+                    onClick={() => (isAfterAnswer ? null : checkAnswer(choice))}
+                    selected={choice.boxOption}
+                  >
+                    {choice.content}
+                  </ChoiceBox>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="no-quiz">Quiz will be shown here soon. </div>
+          )}
+          {isAfterAnswer && (
+            <div className="answer-container">
+              <div className="question-title">Answer</div>
+              <div className="answer-box">{quizData?.commentary}</div>
             </div>
-          </>
-        ) : (
-          <div className="no-quiz">Quiz will be shown here soon. </div>
-        )}
-        {isAfterAnswer && (
-          <div className="answer-container">
-            <div className="question-title">Answer</div>
-            <div className="answer-box">{quizData?.commentary}</div>
-          </div>
-        )}
-      </Content>
+          )}
+        </Content>
+      ) : (
+        <Content>
+          <Chat height={height} />
+        </Content>
+      )}
     </QuizContainer>
   );
 }
@@ -134,12 +168,12 @@ const Category = styled.div<{
 
 const Content = styled.div`
   width: 100%;
+  height: 100%;
   padding: 20px 30px;
 
   .no-quiz {
     width: 100%;
     position: relative;
-    top: 260px;
     /* color: #212121; */
     color: #fefefe;
     font-family: CreatoDisplay;
