@@ -35,8 +35,10 @@ const HeaderWrapper = styled.header`
   top: 0;
   width: 100%;
   height: 96px;
-  background-color: #fff;
-  border-bottom: 2px solid rgba(108, 102, 133, 0.2);
+  background-color: #1b1d25;
+  border-bottom: 2px solid rgba(249, 248, 252, 0.2);
+  /* background-color: #fff;
+  border-bottom: 2px solid rgba(108, 102, 133, 0.2); */
   z-index: 50;
 `;
 
@@ -56,7 +58,8 @@ const HeaderContent = styled.div`
   .center-container {
     width: 100%;
     .title {
-      color: #212121;
+      /* color: #212121; */
+      color: #fefefe;
       font-family: Inter;
       font-size: 24px;
       font-style: normal;

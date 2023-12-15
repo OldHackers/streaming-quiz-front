@@ -85,7 +85,8 @@ const VideoAndQuizSection = styled.div`
   height: 100%;
   /* max-height: 720px; */
   display: flex;
-  border-bottom: 1px solid rgba(108, 102, 133, 0.2);
+  border-bottom: 1px solid rgba(58, 56, 64, 0.2);
+  /* border-bottom: 2px solid rgba(249, 248, 252, 0.2); */
 `;
 
 const VideoPlayerContainer = styled.div`
@@ -93,19 +94,20 @@ const VideoPlayerContainer = styled.div`
   min-width: 720px;
   /* height: 100%; */
   padding: 24px;
-  background-color: #f5f5f5;
+  background-color: #363437;
+  /* background-color: #f5f5f5; */
 `;
 
 const QuizContainer = styled.div`
   width: 100%;
   max-width: 400px;
-  background-color: #fff;
+  background-color: #1b1d25; ;
 `;
 
 const VideosSection = styled.div`
   width: 100%;
   padding: 24px;
-  background-color: #fff;
+  background-color: #1b1d25;
 
   .title {
     color: #212121;
