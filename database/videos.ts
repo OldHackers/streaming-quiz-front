@@ -3,6 +3,7 @@ import { Video } from '../entity/video';
 export const videoData: { [key: string]: Video } = {
   // 류은석. 10주차 강의 Synchronization and deadlock avoidance
   1: {
+    id: '1',
     title: 'Synchronization and deadlock avoidance',
     tutor: '류은석',
     url: 'https://comedu.s3.ap-northeast-2.amazonaws.com/squiz/1.mp4',
@@ -153,6 +154,7 @@ export const videoData: { [key: string]: Video } = {
 
   // 안성진 Chapter 6. Connecting Devices and Virtual LAN part1
   2: {
+    id: '2',
     title: 'Chapter 6. Connecting Devices and Virtual LAN part1',
     tutor: '안성진',
     url: 'https://comedu.s3.ap-northeast-2.amazonaws.com/squiz/2.mp4',
@@ -266,6 +268,7 @@ export const videoData: { [key: string]: Video } = {
 
   //[소프트웨어설계] Ch1. C++ 시작
   3: {
+    id: '3',
     title: '[소프트웨어설계] Ch1. C++ 시작',
     tutor: '박천수',
     url: 'https://comedu.s3.ap-northeast-2.amazonaws.com/squiz/3.mp4',
