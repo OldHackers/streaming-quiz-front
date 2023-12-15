@@ -5,9 +5,10 @@ import { Message } from '../../entity/chat';
 
 interface Props {
   height?: number;
+  id: string;
 }
 
-export default function Chat({ height }: Props) {
+export default function Chat({ height, id }: Props) {
   console.log(height);
   const messageRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
@@ -38,12 +39,42 @@ export default function Chat({ height }: Props) {
     console.log(inputValue);
     setMessageList([...messageList, { text: inputValue, isMine: true }]);
     setInputValue('');
+    // let newMessage = '';
+
+    // const eventSource = new EventSource('/api/openaiChat');
+    // eventSource.onmessage = (event) => {
+    //   console.log(event);
+    //   newMessage = newMessage + JSON.parse(event.data).text;
+    //   //배열의 마지막 요소의 text를 newMessage로 대체
+    //   setMessageList((prev) => {
+    //     const lastMessage = prev[prev.length - 1];
+    //     return [...prev.slice(0, prev.length - 1), { ...lastMessage, text: newMessage }];
+    //   });
+    // };
+
+    // eventSource.onerror = (e: any) => {
+    //   // 종료 또는 에러 발생 시 할 일
+    //   eventSource.close();
+
+    //   if (e.error) {
+    //     // 에러 발생 시 할 일
+    //   }
+
+    //   if (e.target.readyState === EventSource.CLOSED) {
+    //     setMessageList([...messageList, { text: newMessage, isMine: false }]);
+    //   }
+    // };
+
     const response = await axios.post('/api/openaiChat', {
-      message: inputValue,
-      query: 'adfeef',
+      id: id,
+      query: inputValue,
+      context: 'test',
     });
 
     console.log(response);
+
+    // 메시지 업데이트
+    // setMessageList([...messageList, { text: response.data.text, isMine: false }]);
   };
 
   const handleEnterSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -103,7 +134,6 @@ const MessageContainer = styled.div<{ height?: number }>`
 
 const BubbleWrapper = styled.div<{ isMine: boolean }>`
   width: 100%;
-  /* max-width: 200px; */
   display: flex;
   align-items: center;
   margin-bottom: 12px;

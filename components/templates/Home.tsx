@@ -74,6 +74,7 @@ export default function HomeTemplate({ videoData }: Props) {
             isAfterAnswer={isAfterAnswer}
             setIsAfterAnswer={setIsAfterAnswer}
             height={boxHeight}
+            id={videoData.id}
           />
         </QuizContainer>
       </VideoAndQuizSection>
