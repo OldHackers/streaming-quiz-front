@@ -104,7 +104,7 @@ const CategoryBar = styled.div`
   width: 100%;
   margin-top: 9px;
   height: 40px;
-  /* background-color: #000; */
+  background-color: #1b1d25;
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -140,7 +140,8 @@ const Content = styled.div`
     width: 100%;
     position: relative;
     top: 260px;
-    color: #212121;
+    /* color: #212121; */
+    color: #fefefe;
     font-family: CreatoDisplay;
     font-size: 16px;
     display: flex;
@@ -150,7 +151,7 @@ const Content = styled.div`
   }
 
   .question-title {
-    color: #212121;
+    color: #fefefe;
     font-family: CreatoDisplay;
     font-size: 14px;
     font-weight: 700;
@@ -158,7 +159,7 @@ const Content = styled.div`
   }
 
   .question-content {
-    color: #212121;
+    color: #fefefe;
     font-family: CreatoDisplay;
     font-size: 14px;
     font-style: italic;
@@ -172,16 +173,16 @@ const Content = styled.div`
 
   .answer-container {
     width: 100%;
-    border-top: 1px solid rgba(108, 102, 133, 0.2);
+    border-top: 1px solid #fefefe;
     padding-top: 20px;
 
     .answer-box {
       margin-top: 14px;
       width: 100%;
       border-radius: 16px;
-      border: 1px solid rgba(108, 102, 133, 0.2);
+      border: 1px solid #fefefe;
       background: rgba(58, 56, 77, 0.04);
-      color: #212121;
+      color: #fefefe;
       font-family: CreatoDisplay;
       font-size: 12px;
       font-weight: 400;
@@ -196,10 +197,10 @@ const ChoiceBox = styled.div<{ selected?: string }>`
   ${({ selected }) => css`
     width: 100%;
     border-radius: 16px;
-    border: 1px solid rgba(108, 102, 133, 0.2);
+    border: 1px solid #fefefe;
     background: rgba(58, 56, 77, 0.04);
 
-    color: #212121;
+    color: #fefefe;
     font-family: CreatoDisplay;
     font-size: 12px;
     font-weight: 400;
