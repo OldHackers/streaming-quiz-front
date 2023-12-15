@@ -78,12 +78,15 @@ const VideoCardWrapper = styled.div`
       justify-content: space-between;
       align-items: start;
       height: 32px;
+
       .name {
         color: #6c6685;
         font-family: CreatoDisplay;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
+        /* text-overflow: ellipsis;
+        overflow: hidden; */
       }
 
       .sub {
