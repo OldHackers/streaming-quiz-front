@@ -7,11 +7,10 @@ import pinecone from '../../utils/pinecone';
 interface RequestBody {
   topK: number;
   vector: number[];
-  title: string;
+  lectureId: number;
 }
 
 interface QueryResult {
-  title: string;
   text: string;
   score: number;
 }
@@ -21,7 +20,9 @@ export default async function handler(
   res: NextApiResponse<QueryResult[] | { error: string }>,
 ) {
   if (req.method === 'POST') {
-    const { topK, vector, title } = req.body as RequestBody;
+    const { topK, vector, lectureId } = req.body as RequestBody;
+
+    // console.log(`lectureId: ${lectureId}`);
 
     const index = pinecone.index('lecture');
 
@@ -29,16 +30,18 @@ export default async function handler(
       const result = await index.query({
         topK,
         vector,
-        filter: { title: { $eq: title } },
+        // filter: { lectureId: { $eq: lectureId } },
+        includeMetadata: true,
       });
-      res.status(200).json([
-        {
-          // use matches
-          title: '123',
-          text: '123',
-          score: 0.5,
-        },
-      ]);
+
+      console.log(`result: ${JSON.stringify(result)}`);
+
+      const ret = result.matches.map((match) => ({
+        text: match.metadata?.originalText,
+        score: match.score,
+      }));
+
+      res.status(200).json(ret as QueryResult[]);
     } catch (error) {
       console.error('Pinecone query error:', error);
       res.status(500).json({ error: 'Internal Server Error' });

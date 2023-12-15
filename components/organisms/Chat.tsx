@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import styled, { css } from 'styled-components';
+
 import { Message } from '../../entity/chat';
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export default function Chat({ height, id }: Props) {
-  console.log(height);
+  // console.log(height);
   const messageRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
   const [messageList, setMessageList] = useState<Message[]>([
@@ -27,7 +28,6 @@ export default function Chat({ height, id }: Props) {
     { text: 'hello', isMine: true },
     { text: 'hello', isMine: false },
     { text: 'hello', isMine: true },
-
     { text: 'hello', isMine: false },
   ]);
 
@@ -36,49 +36,70 @@ export default function Chat({ height, id }: Props) {
   };
 
   const handleButtonSubmit = async () => {
-    console.log(inputValue);
+    console.log(`inputValue: ${inputValue}`);
     setMessageList([...messageList, { text: inputValue, isMine: true }]);
     setInputValue('');
-    // let newMessage = '';
 
-    // const eventSource = new EventSource('/api/openaiChat');
-    // eventSource.onmessage = (event) => {
-    //   console.log(event);
-    //   newMessage = newMessage + JSON.parse(event.data).text;
-    //   //배열의 마지막 요소의 text를 newMessage로 대체
-    //   setMessageList((prev) => {
-    //     const lastMessage = prev[prev.length - 1];
-    //     return [...prev.slice(0, prev.length - 1), { ...lastMessage, text: newMessage }];
-    //   });
-    // };
+    setMessageList((prev) => [...prev, { text: 'Loading..', isMine: false }]);
 
-    // eventSource.onerror = (e: any) => {
-    //   // 종료 또는 에러 발생 시 할 일
-    //   eventSource.close();
+    const vectorData = await fetch('/api/getEmbedding', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: inputValue }),
+    }).then((res) => res.json());
 
-    //   if (e.error) {
-    //     // 에러 발생 시 할 일
-    //   }
+    const vector = vectorData.data;
 
-    //   if (e.target.readyState === EventSource.CLOSED) {
-    //     setMessageList([...messageList, { text: newMessage, isMine: false }]);
-    //   }
-    // };
+    const lectureData = await fetch('/api/pineconeQuery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topK: 3, vector: vector, lectureId: id }),
+    }).then((res) => res.json());
 
-    const response = await axios.post('/api/openaiChat', {
-      id: id,
-      query: inputValue,
-      context: 'test',
+    // console.log(`lectureData: ${JSON.stringify(lectureData)}`);
+
+    const res = await fetch('/api/openaiChat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: inputValue,
+        context: lectureData[0].text,
+      }),
     });
 
-    console.log(response);
+    if (!res.body) {
+      return;
+    }
 
-    // 메시지 업데이트
-    // setMessageList([...messageList, { text: response.data.text, isMine: false }]);
+    const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+
+    let newMessage = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      const datas = value.split('\n');
+      datas.forEach((data) => {
+        if (!data) {
+          return;
+        }
+        const json = JSON.parse(data.split('data: ')[1]);
+        newMessage += json.text;
+      });
+
+      setMessageList((prev) => {
+        const lastMessage = prev[prev.length - 1];
+        return [...prev.slice(0, prev.length - 1), { ...lastMessage, text: newMessage }];
+      });
+    }
   };
 
   const handleEnterSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && inputValue.trim()) {
+      e.preventDefault();
       handleButtonSubmit();
     }
   };
@@ -103,7 +124,7 @@ export default function Chat({ height, id }: Props) {
           type="text"
           value={inputValue}
           onChange={handleInputChanged}
-          onKeyDown={handleEnterSubmit}
+          onKeyUp={handleEnterSubmit}
         />
         <SubmitButton onClick={() => handleButtonSubmit()}>send</SubmitButton>
       </InputContainer>

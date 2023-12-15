@@ -1,12 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 import HomeTemplate from '../../components/templates/Home';
-import { Video } from '../../entity/video';
-import HttpClient from '../../network/httpClient';
-import VideoRepositoryImpl from '../../repository/video';
-import VideoUseCase from '../../usecase/video';
-import Router, { useRouter } from 'next/router';
 import { videoData } from '../../database/videos';
+import { Video } from '../../entity/video';
 
 export default function Content({ video }: { video: Video }) {
   console.log(video);

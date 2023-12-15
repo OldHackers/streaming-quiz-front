@@ -310,7 +310,7 @@ export const videoData: { [key: string]: Video } = {
 
       {
         id: 2,
-        question: '시불불 언어의 주요 설계 목적 중 하나는 무엇인가요?',
+        question: 'C++ 언어의 주요 설계 목적 중 하나는 무엇인가요?',
         choiceList: [
           { id: 1, content: '표준 준수', choiceNumber: 1, isAnswer: true },
           { id: 2, content: '타입 에러 최소화', choiceNumber: 2, isAnswer: false },

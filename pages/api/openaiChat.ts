@@ -2,29 +2,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import openai from '../../utils/openai';
-import fs from 'fs';
-import path from 'path';
 
 export const systemPrompt = `You are a helpfull chatbot.'
 You shoud help users to find information in text of lecture.
 You should answer the questions with the information from part of lecture.
-I'll give you a question and text of lecture.
+I'll give you a question and text of lecture that is related to the question.
+YOU MUST RESPONSE IN KOERAN.
 `;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { query, context, id } = req.body;
+    const { query, context } = req.body;
+
+    console.log(`query: ${query}`);
+    console.log(`context: ${context}`);
 
     // SSE 관련 헤더 설정
     res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Cache-Control', 'no-cache, no-transform');
     res.setHeader('Connection', 'keep-alive');
-
-    const filePath = path.join(process.cwd(), 'public', 'txt', `${id}.txt`);
-    const text = fs.readFileSync(filePath, 'utf-8');
-    // JSON 형식의 문자열로 변환
-    const jsonString = JSON.stringify({ text });
-    console.log('jsonString: ', jsonString);
 
     try {
       const completionStream = await openai.chat.completions.create({
@@ -35,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
           {
             role: 'user',
-            content: `context: ${'test'}`,
+            content: `text of lecture: ${context}`,
           },
           {
             role: 'user',
@@ -48,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       for await (const chunk of completionStream) {
         const text = chunk.choices[0].delta.content;
-        console.log(`OpenAI chat response: ${text}`);
+        // console.log(`OpenAI chat response: ${text}`);
         if (text) {
           // 이벤트 스트리밍 형식으로 데이터 전송
           res.write(`data: ${JSON.stringify({ text: text })}\n\n`);

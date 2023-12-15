@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         input: text,
       });
 
-      res.status(200).json(result.data[0].embedding);
+      res.status(200).json({ data: result.data[0].embedding });
     } catch (error) {
       console.error('OpenAI embedding error:', error);
       res.status(500).json({ error: 'Internal Server Error' });
