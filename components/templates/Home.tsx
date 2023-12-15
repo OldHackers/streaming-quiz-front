@@ -62,7 +62,7 @@ export default function HomeTemplate({ videoData }: Props) {
 
   return (
     <div>
-      <Header title="Week 13 - Generative Models & Reinforcement Learning" subTitle="Jangwon Lee" />
+      <Header title={videoData.title} subTitle={videoData.tutor} />
       <VideoAndQuizSection>
         <VideoPlayerContainer>
           <VideoPlayer handleProgress={handleProgress} url={videoData.url} />

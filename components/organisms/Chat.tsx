@@ -13,23 +13,7 @@ export default function Chat({ height, id }: Props) {
   // console.log(height);
   const messageRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
-  const [messageList, setMessageList] = useState<Message[]>([
-    { text: 'hello', isMine: true },
-    { text: 'hello', isMine: false },
-    { text: 'hello', isMine: true },
-    {
-      text: 'helhellohellohellohellohellohellolhellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohelloo',
-      isMine: false,
-    },
-    { text: 'hello', isMine: true },
-    { text: 'hello', isMine: false },
-    { text: 'hello', isMine: true },
-    { text: 'hello', isMine: false },
-    { text: 'hello', isMine: true },
-    { text: 'hello', isMine: false },
-    { text: 'hello', isMine: true },
-    { text: 'hello', isMine: false },
-  ]);
+  const [messageList, setMessageList] = useState<Message[]>([]);
 
   const handleInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
