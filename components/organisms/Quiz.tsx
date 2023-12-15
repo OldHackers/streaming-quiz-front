@@ -13,6 +13,7 @@ interface Props {
   isAfterAnswer: boolean;
   setIsAfterAnswer: React.Dispatch<SetStateAction<boolean>>;
   height?: number;
+  id: string;
 }
 
 const enum Mode {
@@ -26,6 +27,7 @@ export default function QuizBox({
   isAfterAnswer,
   setIsAfterAnswer,
   height,
+  id,
 }: Props) {
   console.log(quizData);
   const [mode, setMode] = useState(Mode.Quiz);
@@ -122,7 +124,7 @@ export default function QuizBox({
         </Content>
       ) : (
         <Content>
-          <Chat height={height} />
+          <Chat height={height} id={id} />
         </Content>
       )}
     </QuizContainer>

@@ -5,4 +5,6 @@ export interface Video {
   quizzes: Quiz[];
   title: string;
   tutor: string;
+  content?: string;
+  id: string;
 }
